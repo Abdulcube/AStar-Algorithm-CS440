@@ -19,10 +19,11 @@ class GridGenerator {
     Grid = new Node[160][120];
     start = genStart();
     end = genEnd();
-    Grid[start[0]][start[1]] = new Node(1,'s');
-    Grid[end[0]][end[1]] = new Node(1,'e');
+    Grid[start[0]][start[1]] = new Node('s');
+    Grid[end[0]][end[1]] = new Node('e');
     blockedCells();
     hardCells();
+    normalCells();
     stats();
   }
   public GridGenerator(int[] start, int[] end){
@@ -156,6 +157,17 @@ class GridGenerator {
         continue;
       }
       i--;
+    }
+    return;
+  }
+//Generates the Normal cells within the grid
+  public void normalCells(){
+    for(int i = 0; i<Grid.length; i++){
+      for(int k =0; k<Grid[i].length; k++){
+        if(Grid[i][k] == null){
+          Grid[i][k] =  new Node('1');
+        }
+      }
     }
     return;
   }
