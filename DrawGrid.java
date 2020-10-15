@@ -33,11 +33,7 @@ public class DrawGrid {
 	Map canvas;
 	
 	public void init() {
-		System.out.println(test.Grid[0][0].type);
-		System.out.println(test.Grid[0][1].type);
-		System.out.println(test.Grid[0][2].type);
-		System.out.println(test.Grid[0][3].type);
-		
+
 		frame = new JFrame();
 		frame.setVisible(true);
 		frame.setResizable(false);
