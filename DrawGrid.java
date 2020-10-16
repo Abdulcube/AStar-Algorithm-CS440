@@ -7,23 +7,24 @@ import javax.swing.JPanel;
 
 public class DrawGrid {
 
-	GridGenerator test;
+	GridGenerator grid;
+	JFrame frame;
+	Map canvas;
+	
 	//Default Constructor
 	public DrawGrid() {
 		init();
-		test  = new GridGenerator();
+		grid  = new GridGenerator();
 
 	}
 	
-	public DrawGrid(GridGenerator a) {
+	//Constructor to Create the image and structure based off grid
+	public DrawGrid(GridGenerator g) {
 		init();
-		test = a;
+		grid = g;
 	}
 	
-	//TEST
-	
-	//////
-	
+
 	
 	private final int WIDTH = 820;
 	private final int HEIGHT = 640;
@@ -35,8 +36,8 @@ public class DrawGrid {
 	
 	private int CSIZE = XSIZE / buckX;
 
-	JFrame frame;
-	Map canvas;
+
+
 	
 	public void init() {	
 		frame = new JFrame();
@@ -47,10 +48,33 @@ public class DrawGrid {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		canvas = new Map();
+		initMap();
 		
-		canvas.setBounds(10, 10, XSIZE+1, YSIZE+1);
 		frame.getContentPane().add(canvas);
+		
+	}
+	
+	public void initMap() {
+		
+		canvas = new Map();
+		canvas.setBounds(10, 10, XSIZE+1, YSIZE+1);
+		
+		
+	}
+	
+	//adds delay for live solving and updates the map
+	public void updateMap() {
+		
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
+		}
+		canvas.repaint();
+	}
+	
+	public void updateGrid(GridGenerator g) {
+		this.grid = g;
 	}
 	
 	class Map extends JPanel {	//MAP CLASS
@@ -59,7 +83,7 @@ public class DrawGrid {
 			g.setColor(Color.RED);
 			for(int x = 0; x < buckX; x++) {	//PAINT EACH NODE IN THE GRID
 				for(int y = 0; y < buckY; y++) {					
-					switch(test.Grid[x][y].type) {
+					switch(grid.Grid[x][y].type) {
 					// 0 - BLACK
 					// 1 - WHITE
 					// 2 - GRAY
@@ -76,7 +100,7 @@ public class DrawGrid {
 							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						case '2':
-							g.setColor(Color.GRAY);
+							g.setColor(Color.LIGHT_GRAY);
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							g.setColor(Color.BLACK);
 							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
@@ -89,23 +113,44 @@ public class DrawGrid {
 							g.setColor(Color.RED);
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
+							
+						/*
+						 * 
+						 * FOR THE CHOOSEN PATH AND THE PATHS CONSIDERED BY THE ALGORITHM
+						 * 
+						 */
+						
+						//T is for already traversed meaning the algorithm crossed its path
+						case 't':
+							g.setColor(Color.ORANGE);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
+						case 'p':
+							g.setColor(Color.YELLOW);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
+						/*
+						 * 
+						 * 
+						 * Bridges must be there own as well
+						 * 
+						 * 
+						 */
+						case 'a':
+							g.setColor(Color.CYAN);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
+						case 'b':
+							g.setColor(Color.BLUE);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
 					}
-					//System.out.print(test.Grid[x][y].type);
-					//System.out.println("(" + x*buckX + "," + y*buckY + ")");
-					
-					//g.fillRect(100,50,CSIZE,CSIZE);
-					
 				}
 			}
-			/*
-			int[] s = test.start;
-			g.setColor(Color.GREEN);
-			g.fillRect(s[0]*CSIZE,s[1]*CSIZE,CSIZE,CSIZE);
-			
-			int[] f = test.end;
-			g.setColor(Color.RED);
-			g.fillRect(f[0]*CSIZE,f[1]*CSIZE,CSIZE,CSIZE);
-			*/
 		}
 	}
 }
