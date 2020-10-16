@@ -24,6 +24,7 @@ class GridGenerator {
     blockedCells();
     hardCells();
     normalCells();
+    highways();
     stats();
   }
   public GridGenerator(int[] start, int[] end){
@@ -172,28 +173,73 @@ class GridGenerator {
     return;
   }
 //Generates 4 highways within the map
-/*public void highways(){
+  public void highways(){
+    System.out.println("x: "+Grid.length + ", y: "+ Grid[0].length);
     for (int i = 0;i<4; i++ ) {
       int x =0;
       int y =0;
+      char prev ='a';
       if(Math.random()>.5){
-        int x = (int)(Math.random()*160);
+        x = (int)(Math.random()*140);
       } else {
-        int y = (int)(Math.random()*120);
-
+        y = (int)(Math.random()*100);
       }
-      int j =0;
-      while(j<100){
-        if(Math.random()>){
-          int x = (int)(Math.random()*160);
-        } else {
+
+      if(Math.random()>.5){
+        prev = 'x';
+        for (int k = 0; k<20;k++ ) {
+            if(Grid[x+k][y].type == 's'|| Grid[x+k][y].type == 'e' || Grid[x+k][y].type == 'a' || Grid[x+k][y].type == 'b'){
+              break;
+            } else if(Grid[x+k][y].type == '1'){
+              Grid[x+k][y].type = 'a';
+            } else {
+              Grid[x+k][y].type = 'b';
+            }
+        }
+        x+=20;
+      } else {
+        prev = 'y';
+        for (int k = 0; k<20;k++ ) {
+
+            if(Grid[x][y+k].type == 's'|| Grid[x][y+k].type == 'e' || Grid[x][y+k].type == 'a' || Grid[x][y+k].type == 'b'){
+              break;
+            } else if(Grid[x][y+k].type == '1'){
+              Grid[x][y+k].type = 'a';
+            } else {
+              Grid[x][y+k].type = 'b';
+            }
 
         }
-        j++
+        y+=20;
+      }
+
+      while(x<160 && y<120 && x>=0 && y>=0){
+        double randi=Math.random();
+        System.out.println("" + x + ", "+y);
+        if( (prev=='y' && randi>.6) || (prev=='x' && randi<.6) ){
+          if(Grid[x][y].type == 's'|| Grid[x][y].type == 'e' || Grid[x][y].type == 'a' || Grid[x][y].type == 'b'){
+            break;
+          } else if(Grid[x][y].type == '1'){
+            Grid[x][y].type = 'a';
+          } else {
+            Grid[x][y].type = 'b';
+          }
+            y+=1;
+        } else {
+          if(Grid[x][y].type == 's'|| Grid[x][y].type == 'e' || Grid[x][y].type == 'a' || Grid[x][y].type == 'b'){
+            break;
+          } else if(Grid[x][y].type == '1'){
+            Grid[x][y].type = 'a';
+          } else {
+            Grid[x][y].type = 'b';
+          }
+          x+=1;
+        }
+
       }
 
     }
-  }*/
+  }
 
 // Creates a new file with the first two lines being the start and end points
 // then 160 rows of data;
