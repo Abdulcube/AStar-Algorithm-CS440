@@ -1,6 +1,9 @@
 class Node{
   double weight;
   char type;
+  int x;
+  int y;
+  
 
   // For the function that is only going to pass in a character, to find weight
   //HashMap<Character, Double> quick = new HashMap<Character, Double>();
@@ -19,6 +22,22 @@ class Node{
     this.weight = 0.0;
   }
   //*/
+  public Node(char type, int x, int y) {
+	  if (type == '0') {
+		  this.weight = 0; 
+	  } else if (type == '1') {
+		  this.weight = 0;
+	  } else if (type == '2') {
+		  this.weight = 0;
+	  } else {
+		  this.weight = 1;
+	  }
+	  
+	  this.type = type;
+	  this.x = x;
+	  this.y= y;
+	  
+  }
 
 
 
