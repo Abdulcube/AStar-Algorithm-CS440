@@ -64,26 +64,40 @@ public class DrawGrid {
 					// 1 - WHITE
 					// 2 - GRAY
 						case '0':
-							
 							g.setColor(Color.BLACK);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						case '1':
-							
 							g.setColor(Color.WHITE);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						case '2':
-							
 							g.setColor(Color.GRAY);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
+						case 's':
+							g.setColor(Color.GREEN);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							break;
+						case 'e':
+							g.setColor(Color.RED);
+							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 					}
 					//System.out.print(test.Grid[x][y].type);
 					//System.out.println("(" + x*buckX + "," + y*buckY + ")");
-					g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					
 					//g.fillRect(100,50,CSIZE,CSIZE);
-					g.setColor(Color.BLACK);
-					g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					
 				}
 			}
+			/*
 			int[] s = test.start;
 			g.setColor(Color.GREEN);
 			g.fillRect(s[0]*CSIZE,s[1]*CSIZE,CSIZE,CSIZE);
@@ -91,6 +105,7 @@ public class DrawGrid {
 			int[] f = test.end;
 			g.setColor(Color.RED);
 			g.fillRect(f[0]*CSIZE,f[1]*CSIZE,CSIZE,CSIZE);
+			*/
 		}
 	}
 }
