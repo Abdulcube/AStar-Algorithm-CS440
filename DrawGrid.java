@@ -7,15 +7,21 @@ import javax.swing.JPanel;
 
 public class DrawGrid {
 
-
+	GridGenerator test;
 	//Default Constructor
 	public DrawGrid() {
 		init();
+		test  = new GridGenerator();
 
 	}
 	
+	public DrawGrid(GridGenerator a) {
+		init();
+		test = a;
+	}
+	
 	//TEST
-	GridGenerator test = new GridGenerator();
+	
 	//////
 	
 	
@@ -32,8 +38,7 @@ public class DrawGrid {
 	JFrame frame;
 	Map canvas;
 	
-	public void init() {
-
+	public void init() {	
 		frame = new JFrame();
 		frame.setVisible(true);
 		frame.setResizable(false);
@@ -53,20 +58,7 @@ public class DrawGrid {
 			//super.paintComponent(g);
 			g.setColor(Color.RED);
 			for(int x = 0; x < buckX; x++) {	//PAINT EACH NODE IN THE GRID
-				for(int y = 0; y < buckY; y++) {
-					
-					/*
-					if(test.Grid[x][y].type == '0') {
-						System.out.println("CASE 0");
-					} else if (test.Grid[x][y].type == '1') {
-						System.out.println("CASE 1");
-					} else if (test.Grid[x][y].type == '2') {
-						System.out.println("CASE 2");
-					}
-					
-					*/
-					
-					
+				for(int y = 0; y < buckY; y++) {					
 					switch(test.Grid[x][y].type) {
 					// 0 - BLACK
 					// 1 - WHITE
