@@ -16,8 +16,11 @@ public class Algorithm {
 		while(!fringe.isEmpty()) {
 			Node cur = fringe.remove();
 			
-			// We need to set up x and y inside of the Node class
-			//if(cur = end)
+			if (cur.x == test.end[0] && cur.y == test.end[1]) {
+				//Path Found
+			}
+			
+
 		}
 		
 	}
