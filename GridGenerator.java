@@ -19,8 +19,8 @@ class GridGenerator {
     Grid = new Node[160][120];
     start = genStart();
     end = genEnd();
-    Grid[start[0]][start[1]] = new Node('s');
-    Grid[end[0]][end[1]] = new Node('e');
+    Grid[start[0]][start[1]] = new Node('s' , start[0],start[1]);
+    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
     blockedCells();
     hardCells();
     normalCells();
@@ -28,8 +28,8 @@ class GridGenerator {
   }
   public GridGenerator(int[] start, int[] end){
     Grid = new Node[160][120];
-    Grid[start[0]][start[1]] = new Node(1,'s');
-    Grid[end[0]][end[1]] = new Node(1,'e');
+    Grid[start[0]][start[1]] = new Node('s' , start[0] , start[1]);
+    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
     this.start = start;
     this.end = end;
     hardTraverse = 0;
@@ -53,10 +53,10 @@ class GridGenerator {
           if(row.charAt(i) == '-'){
             Grid[k][i] = null;
           } else if(row.charAt(i) == '2'){
-            Grid[k][i] = new Node(0,row.charAt(i));
+            Grid[k][i] = new Node(row.charAt(i) , k , i);
             hardTraverse++;
           } else {
-            Grid[k][i] = new Node(0,row.charAt(i));
+            Grid[k][i] = new Node(row.charAt(i) , k , i);
           }
         }
         k++;
@@ -137,7 +137,7 @@ class GridGenerator {
           }
           double fifty = Math.random();
           if(fifty>.5){
-            Grid[k][j] = new Node('2');
+            Grid[k][j] = new Node('2' , k , j);
             hardsCells++;
           }
 
@@ -153,7 +153,7 @@ class GridGenerator {
       int x = (int)(Math.random()*160);
       int y = (int)(Math.random()*120);
       if((x!=start[0] && y != start[1]) || (x!=end[0]&&y!=end[1])){
-        Grid[x][y] = new Node('0');
+        Grid[x][y] = new Node('0' , x ,y);
         continue;
       }
       i--;
@@ -165,7 +165,7 @@ class GridGenerator {
     for(int i = 0; i<Grid.length; i++){
       for(int k =0; k<Grid[i].length; k++){
         if(Grid[i][k] == null){
-          Grid[i][k] =  new Node('1');
+          Grid[i][k] =  new Node('1', i , k);
         }
       }
     }
