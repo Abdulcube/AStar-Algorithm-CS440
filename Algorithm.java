@@ -3,7 +3,18 @@ import java.util.PriorityQueue;
 
 public class Algorithm {
 	
-	GridGenerator test = new GridGenerator();
+	GridGenerator test;
+	
+	//Default Constructor
+	public Algorithm() {
+		test = new GridGenerator();
+	}
+	
+	//Perform Algorithm on particular Grid
+	public Algorithm(GridGenerator a) {
+		test = a;
+	}
+	
 	int[] s = test.start;
 	int[] f = test.end;
 	Node end = new Node();
