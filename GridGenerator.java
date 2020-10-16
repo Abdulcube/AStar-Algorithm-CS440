@@ -133,7 +133,7 @@ class GridGenerator {
           //  System.out.println(""+ k +" "+j+" " +highx +" "+highy+ " " +lowx +" "+lowy);
 
           if((k==start[0] && j == start[1]) || (k==end[0]&&j==end[1])){
-            continue;
+            break;
           }
           double fifty = Math.random();
           if(fifty>.5){
