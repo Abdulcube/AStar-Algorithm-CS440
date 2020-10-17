@@ -6,6 +6,7 @@ public class Algorithm {
 	GridGenerator test;
 	
 	//Default Constructor
+	//For testing and demonstrating purposes
 	public Algorithm() {
 		test = new GridGenerator();
 	}
@@ -20,8 +21,15 @@ public class Algorithm {
 	Node end = new Node();
 	//
 	
+	
 	public void AStar() {
+		
+		//List of current nodes to be expanded
 		PriorityQueue<Node> fringe = new PriorityQueue<Node>();
+		
+		//List of all verticies that A* has expanded
+		PriorityQueue<Node> closed = new PriorityQueue<Node>();
+		
 		fringe.add(test.Grid[s[0]][s[1]]);
 		
 		while(!fringe.isEmpty()) {
@@ -33,6 +41,13 @@ public class Algorithm {
 			
 
 		}
+	}
+	//FInd shortest path from start to current node
+	public void findG(PriorityQueue<Node> fringe) {
+		
+	}
+	
+	public void fingH() {
 		
 	}
 }
