@@ -41,15 +41,15 @@ class Node{
   }
 
   public char getType() { return this.type; }
-  public int getX(Node n) { return this.x; }
-  public int getY(Node n) { return this.y; }
-  public boolean wasChecked(Node n) { return this.wasChecked;}
-  public double getCost(Node n) { return this.cost; }
+  public int getX() { return this.x; }
+  public int getY() { return this.y; }
+  public boolean wasChecked() { return this.wasChecked;}
+  public double getCost() { return this.cost; }
   
-  public void setChecked(Node n) {
+  public void setChecked() {
 	  this.wasChecked = true;
   }
-  public void setFinalPath(Node n) {
+  public void setFinalPath() {
 	  this.isFinalPath = true;
   }
 
