@@ -1,6 +1,7 @@
 class Node{
   double cost;
   boolean wasChecked;
+  boolean isFinalPath;
   char type;
   int x;
   int y;
@@ -12,11 +13,13 @@ class Node{
     cost = 0;
     type = '1';
     wasChecked = false;
+    this.isFinalPath = false;
   }
   public Node(int c, char type){
     this.cost = c;
     this.type = type;
     this.wasChecked = false;
+    this.isFinalPath = false;
   }
 
   //Need to decide on Weighted Values for the spaces first
@@ -24,6 +27,7 @@ class Node{
     this.type = type;
     this.cost = 0.0;
     this.wasChecked = false;
+    this.isFinalPath = false;
   }
   
   //*/
@@ -33,6 +37,7 @@ class Node{
 	  this.x = x;
 	  this.y= y;  
 	  this.wasChecked = false;
+	  this.isFinalPath = false;
   }
 
   public char getType() { return this.type; }
@@ -43,6 +48,9 @@ class Node{
   
   public void setChecked(Node n) {
 	  this.wasChecked = true;
+  }
+  public void setFinalPath(Node n) {
+	  this.isFinalPath = true;
   }
 
 

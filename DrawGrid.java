@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 
 
@@ -100,7 +101,7 @@ public class DrawGrid {
 							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						case '2':
-							g.setColor(Color.LIGHT_GRAY);
+							g.setColor(new Color(170,170,170)); //Light Gray
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							g.setColor(Color.BLACK);
 							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
@@ -116,18 +117,29 @@ public class DrawGrid {
 							
 
 						case 'a':
-							g.setColor(Color.CYAN);
+							g.setColor(new Color(204,212,255)); //Light Blue
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						case 'b':
-							g.setColor(Color.BLUE);
+							g.setColor(new Color(119,133,199)); //Dark Blue
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+							g.setColor(Color.BLACK);
+							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 						
 					}
 					if(grid.Grid[x][y].wasChecked) {
-						g.setColor(Color.YELLOW);
+						g.setColor(new Color(255,255,179)); //Light Yellow
 						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					}
+					
+					if(grid.Grid[x][y].isFinalPath) {
+						 g.setColor(new Color(255,0,128)); //Bright Pink
+						 g.setFont(new Font("Arial",Font.BOLD,8));
+						 //Draw String in JPanel
+						 g.drawString("+",x*CSIZE,y*CSIZE);
 					}
 				}
 			}
