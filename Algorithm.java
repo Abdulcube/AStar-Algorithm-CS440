@@ -1,53 +1,110 @@
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Algorithm {
-	
+
 	GridGenerator test;
-	
+
 	//Default Constructor
 	//For testing and demonstrating purposes
 	public Algorithm() {
 		test = new GridGenerator();
 	}
-	
+
 	//Perform Algorithm on particular Grid
 	public Algorithm(GridGenerator a) {
 		test = a;
 	}
-	
+
 	int[] s = test.start;
 	int[] f = test.end;
 	Node end = new Node();
 	//
-	
-	
+
+
 	public void AStar() {
-		
+
 		//List of current nodes to be expanded
 		PriorityQueue<Node> fringe = new PriorityQueue<Node>();
-		
+
 		//List of all verticies that A* has expanded
 		PriorityQueue<Node> closed = new PriorityQueue<Node>();
-		
+
 		fringe.add(test.Grid[s[0]][s[1]]);
-		
-		while(!fringe.isEmpty()) {
+
+		while (!fringe.isEmpty()) {
 			Node cur = fringe.remove();
-			
+
 			if (cur.x == test.end[0] && cur.y == test.end[1]) {
 				//Path Found
 			}
-			
+
 
 		}
 	}
+
 	//FInd shortest path from start to current node
 	public void findG(PriorityQueue<Node> fringe) {
-		
+
 	}
-	
+
 	public void fingH() {
-		
+
+	}
+
+	public String cellPos(Node parent, Node child) {
+
+		if ((parent.x == child.x + 1) && (parent.y == child.y - 1)) { //top right
+			return ("tr");
+		} else if ((parent.x == child.x + 1) && (parent.y == child.y + 1)) { //top left
+			return ("tl");
+		} else if ((parent.x == child.x - 1) && (parent.y == child.y + 1)) { //bottom left
+			return ("bl");
+		} else if ((parent.x == child.x - 1) && (parent.y == child.y - 1)) { //bottom right
+			return ("tl");
+		} else if ((parent.x == child.x - 1) && (parent.y == child.y)) { //bottom
+			return ("b");
+		} else if ((parent.x == child.x + 1) && (parent.y == child.y)) { //top
+			return ("t");
+		} else if ((parent.x == child.x) && (parent.y == child.y - 1)) { //right
+			return ("r");
+		} else return ("l");
+	}
+
+
+	public double cost(Node parent, Node child) {
+		//moving between two normal blocks vertically or horizontally
+		if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '1' && child.getType() == '1') {
+			return 1.0;
+		}
+		//moving between a normal and a hard block vertically or horizontally
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r")|| cellPos(parent, child).equals("l")) && parent.getType() == '1' && child.getType() == '2') {
+			return 1.5;
+		}
+		//moving between a normal and a hard block vertically or horizontally
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '2' && child.getType() == '1') {
+			return 1.5;
+		}
+		//moving between two normal blocks vertically or horizontally
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '2' && child.getType() == '2') {
+			return 2.0;
+		}
+		//moving between two normal blocks diagonally
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '1' && child.getType() == '1') {
+			return (Math.sqrt(2.0));
+		}
+		//moving between a normal and a hard block diagonally
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '1' && child.getType() == '2') {
+			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2);
+		}
+		//moving between a normal and a hard block diagonally
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '2' && child.getType() == '1') {
+			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2);
+		}
+		//moving between two hard cells diagonally
+		else {
+			return (Math.sqrt(8));
+		}
+
+
 	}
 }

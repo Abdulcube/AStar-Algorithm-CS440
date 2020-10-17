@@ -35,7 +35,7 @@ class Node{
 	  this.wasChecked = false;
   }
 
-  public char getType(Node n) { return this.type; }
+  public char getType() { return this.type; }
   public int getX(Node n) { return this.x; }
   public int getY(Node n) { return this.y; }
   public boolean wasChecked(Node n) { return this.wasChecked;}

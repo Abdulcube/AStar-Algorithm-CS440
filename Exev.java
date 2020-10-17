@@ -1,13 +1,11 @@
-import java.io.*;
+
 class Exev{
+
   public static void main(String[] args) {
     System.out.println("Hello, World");
     GridGenerator test = new GridGenerator();
-    //new DrawGrid(test);
-    //test.writeToFile("test1.txt");
-
-  //  test.highways();
-  //  test.writeToFile("test1.txt");
+    new DrawGrid(test);
+    test.writeToFile("test1.txt");
     //int[] start = {0,0};
     //int[] end = {159,119};
   //  GridGenerator test = new GridGenerator();
