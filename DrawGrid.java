@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+
+//In the Algorithm you must update the grid regularly to maintain an accurate grid
 public class DrawGrid {
 
 	GridGenerator grid;
@@ -82,11 +84,9 @@ public class DrawGrid {
 			//super.paintComponent(g);
 			g.setColor(Color.RED);
 			for(int x = 0; x < buckX; x++) {	//PAINT EACH NODE IN THE GRID
-				for(int y = 0; y < buckY; y++) {					
+				for(int y = 0; y < buckY; y++) {
+
 					switch(grid.Grid[x][y].type) {
-					// 0 - BLACK
-					// 1 - WHITE
-					// 2 - GRAY
 						case '0':
 							g.setColor(Color.BLACK);
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
@@ -114,32 +114,7 @@ public class DrawGrid {
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
 							
-						/*
-						 * 
-						 * FOR THE CHOOSEN PATH AND THE PATHS CONSIDERED BY THE ALGORITHM
-						 * 
-						 */
-						
-						//T is for already traversed meaning the algorithm crossed its path
-						case 't':
-							g.setColor(Color.ORANGE);
-							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
-							g.setColor(Color.BLACK);
-							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
-							break;
-						case 'p':
-							g.setColor(Color.YELLOW);
-							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
-							g.setColor(Color.BLACK);
-							g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
-							break;
-						/*
-						 * 
-						 * 
-						 * Bridges must be there own as well
-						 * 
-						 * 
-						 */
+
 						case 'a':
 							g.setColor(Color.CYAN);
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
@@ -148,6 +123,11 @@ public class DrawGrid {
 							g.setColor(Color.BLUE);
 							g.fillRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 							break;
+						
+					}
+					if(grid.Grid[x][y].wasChecked) {
+						g.setColor(Color.YELLOW);
+						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 				}
 			}
