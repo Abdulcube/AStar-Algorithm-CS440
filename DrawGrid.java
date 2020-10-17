@@ -139,7 +139,7 @@ public class DrawGrid {
 						 g.setColor(new Color(255,0,128)); //Bright Pink
 						 g.setFont(new Font("Arial",Font.BOLD,8));
 						 //Draw String in JPanel
-						 g.drawString("+",x*CSIZE,y*CSIZE);
+						 g.drawString("+",x*CSIZE,y*CSIZE+5);
 					}
 				}
 			}
