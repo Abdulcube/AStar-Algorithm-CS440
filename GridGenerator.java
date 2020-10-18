@@ -17,14 +17,12 @@ class GridGenerator {
 // One Constructor that takes in a string that is a file name to import the data;
   public GridGenerator(){
     Grid = new Node[160][120];
-    start = genStart();
-    end = genEnd();
-    Grid[start[0]][start[1]] = new Node('s' , start[0],start[1]);
-    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
+    generate();
     blockedCells();
     hardCells();
     normalCells();
     highways();
+    generate();
     stats();
   }
   public GridGenerator(int[] start, int[] end){
@@ -96,18 +94,49 @@ class GridGenerator {
       System.out.println("Number of hardCells = " + hardTraverse);
   }
 
+  public void generate(){
+    int x1,x2,y1,y2=0;
+    do{
+      start = genStart();
+      end = genEnd();
+      x1 = start[0];
+      x2 = end[0];
+      y1 = start[1];
+      y2 = end[1];
+    } while(Math.sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1))<100);
+    Grid[start[0]][start[1]] = new Node('s' , start[0],start[1]);
+    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
+    return;
+  }
   //Generates start for the path process, in array format
   public static int[] genStart(){
     int[] starters = new int[2];
-    starters[0] = (int)(Math.random()*20);
-    starters[1] = (int)(Math.random()*120);
-    return starters;
+    if(Math.random()>.5){
+      starters[0] = (int)(Math.random()*20);
+    } else {
+      starters[0] = ((int)(Math.random()*20))+139;
     }
+    if(Math.random()>.5){
+      starters[1] = ((int)(Math.random()*20))+99;
+    } else {
+      starters[1] = (int)(Math.random()*20);
+    }
+
+    return starters;
+  }
   //Generates Goals for the path process, in array format
   public static int[] genEnd(){
     int[] end = new int[2];
-    end[0] = (int)(Math.random()*20)+140;
-    end[1] = (int)(Math.random()*120);
+    if(Math.random()>.5){
+      end[0] = (int)(Math.random()*20);
+    } else {
+      end[0] = ((int)(Math.random()*20))+139;
+    }
+    if(Math.random()>.5){
+      end[1] = ((int)(Math.random()*20))+99;
+    } else {
+      end[1] = (int)(Math.random()*20);
+    }
     return end;
   }
 
