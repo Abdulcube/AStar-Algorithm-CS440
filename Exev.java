@@ -5,6 +5,8 @@ class Exev{
     System.out.println("Hello, World");
     GridGenerator test = new GridGenerator();
     new DrawGrid(test);
+    Algorithm a = new Algorithm();
+    a.AStar();
     test.writeToFile("test1.txt");
     //int[] start = {0,0};
     //int[] end = {159,119};

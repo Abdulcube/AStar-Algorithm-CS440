@@ -1,40 +1,123 @@
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Algorithm {
 
-	GridGenerator test;
+
+	GridGenerator grid;
 
 	//Default Constructor
 	//For testing and demonstrating purposes
 	public Algorithm() {
-		test = new GridGenerator();
+		grid = new GridGenerator();
 	}
 
 	//Perform Algorithm on particular Grid
 	public Algorithm(GridGenerator a) {
-		test = a;
+		grid = a;
 	}
 
-	int[] start ;
-	int[] end ;
+	int[] start;
+	int[] end;
 	//Node end = new Node();
-	//
+//List of current nodes to be expanded
+	PriorityQueue<Node> fringe = new PriorityQueue<Node>(new Comparator<Node>() {
+		@Override
+		public int compare(Node node1, Node node2) {
+			return Integer.compare(node1.getF(), node2.getF());
+		}
+	});
+	Set<Node> closed = new HashSet<Node>();
+	Node s = grid.Grid[start[0]][start[1]];
+	Node e = grid.Grid[end[0]][end[1]];
 
 
-	public void AStar(GridGenerator grid, int[] start, int[] end) {
+	public void AStar() {
 
-		this.start = start;
-		this.end = end;
+		Node s = grid.Grid[start[0]][start[1]];
+		Node e = grid.Grid[end[0]][end[1]];
+
+		fringe.add(s);
 
 
-		//List of current nodes to be expanded
-		PriorityQueue<Node> fringe = new PriorityQueue<Node>();
+		while (!fringe.isEmpty()) {
+			Node current = fringe.poll();
 
-		//List of all verticies that A* has expanded
-		PriorityQueue<Node> closed = new PriorityQueue<Node>();
+			if (current.equals(e)) {
+				findPath(current, grid);
+				break; //found the goal
+			}
 
-		fringe.add(test.Grid[start[0]][start[1]]);
+			fringe.remove(current);
+			closed.add(current);
 
+			for (Node neighbor : getNeighbors(current, grid.Grid)) {
+
+				if (neighbor.getValue() == 1)
+					continue;
+
+				Double g = current.getG() + h(current, neighbor);
+
+				//This is used for tie-breaking higher G values.
+				if (closed.contains(neighbor))
+					continue;
+
+				if (!fringe.contains(neighbor) || g > neighbor.getG()) {
+					neighbor.setG(g);
+					neighbor.setH(h(neighbor, e));
+					neighbor.setF(neighbor.getG() + neighbor.getH());
+					neighbor.setNodeParent(current);
+					//neighbor.updateToolTip();
+					//neighbor.getRectangle().setFill(Color.CYAN);
+					fringe.add(neighbor);
+				}
+
+			}
+		}
+	}
+
+
+
+	////////////////////////////////////////////
+	public List<Node> findPath(Node node, GridGenerator grid) {
+		Node temp = grid.Grid[end[0]][end[1]];
+		List<Node> path = new ArrayList<>();
+		do {
+			path.add(temp);
+			temp = temp.getNodeParent();
+		}
+		while (temp != grid.Grid[start[0]][start[1]]);
+
+		//for (Node n : path) {
+		//	n.getRectangle().setFill(Color.GREEN);
+		//}
+		return path;
+	}
+
+	public List<Node> getNeighbors(Node node, Node[][] grid) {
+		int[][] NEIGHBOR_POINTS = {
+						{-1, 0},
+						{ 0,-1},
+						{0, 1},
+						{ 1, 0},
+						{-1,-1},
+						{-1,1},
+						{1,1},
+						{1,-1}
+				};
+
+				List<Node> neighbors = new ArrayList<>();
+
+				for (int[] neighborPositions : NEIGHBOR_POINTS) {
+					int nrow = node.getX() + neighborPositions[0];
+					int ncol = node.getY() + neighborPositions[1];
+					if (nrow >= 0 && nrow < 120 && ncol >= 0 && ncol < 160) {
+						neighbors.add(grid[nrow][ncol]);
+					}
+				}
+				return neighbors;
+			}
+////////////////////////////////////////////
+/*
 		while (!fringe.isEmpty()) {
 			Node cur = fringe.remove();
 
@@ -45,6 +128,7 @@ public class Algorithm {
 
 		}
 	}
+*/
 
 	//FInd shortest path from start to current node
 	public void findG(PriorityQueue<Node> fringe) {

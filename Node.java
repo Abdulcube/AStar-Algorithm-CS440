@@ -8,7 +8,9 @@ class Node{
   int parent_x;
   int parent_y;
   double f,h,g = Double.POSITIVE_INFINITY;
-  
+  Node parent = this;
+  private int value;
+
 
   // For the function that is only going to pass in a character, to find weight
   //HashMap<Character, Double> quick = new HashMap<Character, Double>();
@@ -68,8 +70,8 @@ class Node{
   public double getG(){
     return this.g;
   }
-  public double getF(){
-    return this.f;
+  public int getF(){
+    return (int)this.f;
   }
 
 
@@ -78,7 +80,22 @@ class Node{
   public int getY() { return this.y; }
   public boolean wasChecked() { return this.wasChecked;}
   public double getCost() { return this.cost; }
-  
+
+  public void setNodeParent(Node parent) {
+    this.parent = parent;
+  }
+
+  public Node getNodeParent() {
+    return parent;
+  }
+
+  public void setValue(int value) {
+    this.value = value;
+  }
+
+  public int getValue(){
+    return this.value;
+  }
   public void setChecked() {
 	  this.wasChecked = true;
   }
