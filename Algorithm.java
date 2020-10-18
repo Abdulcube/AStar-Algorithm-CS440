@@ -47,10 +47,13 @@ public class Algorithm {
 
 	}
 
-	public void fingH() {
-
+	//Finding the euclidean distance between the current node and the end node
+	public double h(Node n, Node end) {
+		int dist = Math.abs(n.x = end.x) + Math.abs(n.y - end.y);
+		return dist;
 	}
 
+	//Return the position of the next node as a string to assist with the movement cost calculations
 	public String cellPos(Node parent, Node child) {
 
 		if ((parent.x == child.x + 1) && (parent.y == child.y - 1)) { //top right
@@ -70,7 +73,7 @@ public class Algorithm {
 		} else return ("l");
 	}
 
-
+	//Calculating the cost of the movement from one node to its neighbor based on its neighbors type and position
 	public double cost(Node parent, Node child) {
 		//moving between two normal blocks vertically or horizontally
 		if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '1' && child.getType() == '1') {
