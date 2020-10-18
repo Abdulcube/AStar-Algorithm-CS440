@@ -5,6 +5,9 @@ class Node{
   char type;
   int x;
   int y;
+  int parent_x;
+  int parent_y;
+  double f,h,g = Double.POSITIVE_INFINITY;
   
 
   // For the function that is only going to pass in a character, to find weight

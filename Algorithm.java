@@ -15,13 +15,17 @@ public class Algorithm {
 		test = a;
 	}
 
-	int[] s = test.start;
-	int[] f = test.end;
-	Node end = new Node();
+	int[] start ;
+	int[] end ;
+	//Node end = new Node();
 	//
 
 
-	public void AStar() {
+	public void AStar(GridGenerator grid, int[] start, int[] end) {
+
+		this.start = start;
+		this.end = end;
+
 
 		//List of current nodes to be expanded
 		PriorityQueue<Node> fringe = new PriorityQueue<Node>();
@@ -49,7 +53,7 @@ public class Algorithm {
 
 	//Finding the euclidean distance between the current node and the end node
 	public double h(Node n, Node end) {
-		int dist = Math.abs(n.x = end.x) + Math.abs(n.y - end.y);
+		double dist = Math.sqrt(((n.x - end.x)*2) + ((n.y - end.y)*2));
 		return dist;
 	}
 
