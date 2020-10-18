@@ -33,7 +33,7 @@ public class Algorithm {
 		//List of all verticies that A* has expanded
 		PriorityQueue<Node> closed = new PriorityQueue<Node>();
 
-		fringe.add(test.Grid[s[0]][s[1]]);
+		fringe.add(test.Grid[start[0]][start[1]]);
 
 		while (!fringe.isEmpty()) {
 			Node cur = fringe.remove();

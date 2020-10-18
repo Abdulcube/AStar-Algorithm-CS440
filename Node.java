@@ -35,13 +35,43 @@ class Node{
   
   //*/
   public Node(char type, int x, int y) {
-	  this.cost = 0;
-	  this.type = type;
-	  this.x = x;
-	  this.y= y;  
-	  this.wasChecked = false;
-	  this.isFinalPath = false;
+    if(type == 's'){
+      this.f = 0.0;
+      this.g = 0.0;
+      this.h = 0.0;
+      this.parent_x = x;
+      this.parent_y = y;
+    }
+    else {
+      this.cost = 0;
+      this.type = type;
+      this.x = x;
+      this.y = y;
+      this.wasChecked = false;
+      this.isFinalPath = false;
+    }
   }
+
+  public void setH(double h){
+    this.h = h;
+  }
+  public void setG(double g){
+    this.g = g;
+  }
+  public void setF(double f){
+    this.f = f;
+  }
+
+  public double getH(){
+    return this.h;
+  }
+  public double getG(){
+    return this.g;
+  }
+  public double getF(){
+    return this.f;
+  }
+
 
   public char getType() { return this.type; }
   public int getX() { return this.x; }
