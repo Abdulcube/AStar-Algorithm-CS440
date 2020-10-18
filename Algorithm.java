@@ -79,29 +79,61 @@ public class Algorithm {
 		if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '1' && child.getType() == '1') {
 			return 1.0;
 		}
+		//moving between 2 normal HIGHWAY blocks vertically or horizontally
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r")|| cellPos(parent, child).equals("l")) && parent.getType() == 'a' && child.getType() == 'a') {
+			return 1.0/4;
+		}
 		//moving between a normal and a hard block vertically or horizontally
 		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r")|| cellPos(parent, child).equals("l")) && parent.getType() == '1' && child.getType() == '2') {
 			return 1.5;
+		}
+		//moving between a normal and a hard block vertically or horizontally w HIGHWAY
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == 'a' && child.getType() == 'b') {
+			return 1.5/4;
 		}
 		//moving between a normal and a hard block vertically or horizontally
 		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '2' && child.getType() == '1') {
 			return 1.5;
 		}
-		//moving between two normal blocks vertically or horizontally
+		//moving between a normal and a hard block vertically or horizontally w HIGHWAY
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == 'b' && child.getType() == 'a') {
+			return 1.5/4;
+		}
+		//moving between two hard to traverse blocks vertically or horizontally
 		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r") || cellPos(parent, child).equals("l")) && parent.getType() == '2' && child.getType() == '2') {
 			return 2.0;
+		}
+		//moving between two hard to traverse HIGHWAY blocks vertically or horizontally
+		else if ((cellPos(parent, child).equals("b") || cellPos(parent, child).equals("t") || cellPos(parent, child).equals("r")|| cellPos(parent, child).equals("l")) && parent.getType() == 'b' && child.getType() == 'b') {
+			return 2.0/4;
 		}
 		//moving between two normal blocks diagonally
 		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '1' && child.getType() == '1') {
 			return (Math.sqrt(2.0));
 		}
+		//moving between two normal HIGHWAY blocks diagonally
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == 'a' && child.getType() == 'a') {
+			return (Math.sqrt(2.0))/4;
+		}
 		//moving between a normal and a hard block diagonally
 		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '1' && child.getType() == '2') {
 			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2);
 		}
+		//moving between a normal and a hard block diagonally w HIGHWAY
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == 'a' && child.getType() == 'b') {
+			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2)/4;
+		}
 		//moving between a normal and a hard block diagonally
 		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '2' && child.getType() == '1') {
 			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2);
+		}
+		//moving between a normal and a hard block diagonally w HIGHWAY
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == 'b' && child.getType() == 'a') {
+			return ((Math.sqrt(2.0) + Math.sqrt(8)) / 2)/4;
+		}
+		//moving between two hard HIGHWAY blocks diagonally
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == 'b' && child.getType() == 'b') {
+			return Math.sqrt(8)/ 4;
 		}
 		//moving between two hard cells diagonally
 		else {
