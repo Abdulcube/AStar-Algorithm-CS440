@@ -17,7 +17,9 @@ class GridGenerator {
 // One Constructor that takes in a string that is a file name to import the data;
   public GridGenerator(){
     Grid = new Node[160][120];
-    generate();
+    start = new int[2];
+    end = new int[2];
+    //generate();
     blockedCells();
     hardCells();
     normalCells();
@@ -244,7 +246,7 @@ class GridGenerator {
 
       while(x<160 && y<120 && x>=0 && y>=0){
         double randi=Math.random();
-        System.out.println("" + x + ", "+y);
+      //  System.out.println("" + x + ", "+y);
         if( (prev=='y' && randi>.6) || (prev=='x' && randi<.6) ){
           if(Grid[x][y].type == 's'|| Grid[x][y].type == 'e' || Grid[x][y].type == 'a' || Grid[x][y].type == 'b'){
             break;
