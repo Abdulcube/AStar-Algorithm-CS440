@@ -26,12 +26,7 @@ public class AlternateAlgorithm {
 		
 	}
 	
-	
-	
-	
-	
-	
-	public void AStar() {
+public void AStar() {
 		
 
 		int[] start;
@@ -57,7 +52,154 @@ public class AlternateAlgorithm {
 				break;
 			}
 			
-			double cost = priority.get(0).cost = 1;
+			double cost = priority.get(0).cost;
+			
+			int jumps = priority.get(0).jumps+1;
+			
+			
+			ArrayList<Node> explored = exploreNeighborsW(priority.get(0),jumps,cost);
+			if(explored.size() > 0) {
+				
+				priority.remove(0);
+				priority.addAll(explored);
+				
+				//LIVE UPDATE
+				scene.updateMap();
+				
+				
+			} else {
+				priority.remove(0);
+			}
+			sortQueW(priority);	//SORT THE PRIORITY QUE
+		}
+	}
+	
+	public ArrayList<Node> sortQueW(ArrayList<Node> sort) {	//SORT PRIORITY QUE
+		
+		System.out.println("___________sortQ______________");
+		int[] start;
+		int[] end;
+		
+		start = grid.start;
+		end = grid.end;
+		
+		int c = 0;
+		while(c < sort.size()) {
+			int sm = c;
+			for(int i = c+1; i < sort.size(); i++) {
+				
+				if(sort.get(i).getEuclidDist(end[0],end[1])+sort.get(i).cost < sort.get(sm).getEuclidDist(end[0],end[1])+sort.get(sm).cost){
+					sm = i;
+				}
+			}
+			if(c != sm) {
+				Node temp = sort.get(c);
+				sort.set(c, sort.get(sm));
+				sort.set(sm, temp);
+			}	
+			c++;
+		}
+		return sort;
+	}
+	
+	public ArrayList<Node> exploreNeighborsW(Node current, int hops , double cost) {	//EXPLORE NEIGHBORS
+		//System.out.println("____________exploreNei_____________");
+		ArrayList<Node> explored = new ArrayList<Node>();	//LIST OF NODES THAT HAVE BEEN EXPLORED
+		for(int a = -1; a <= 1; a++) {
+			for(int b = -1; b <= 1; b++) {
+				int xbound = current.getX()+a;
+				int ybound = current.getY()+b;
+				if((xbound > -1 && xbound < 160) && (ybound > -1 && ybound < 120)) {	
+					//MAKES SURE THE NODE IS NOT OUTSIDE THE GRID
+					Node neighbor = grid.Grid[xbound][ybound];
+					if((neighbor.jumps ==-1 || neighbor.jumps > cost) && neighbor.getType()!= '0') {	//CHECKS IF THE NODE IS NOT A WALL AND THAT IT HAS NOT BEEN EXPLORED
+						//System.out.println("__________in if_______________");
+						//System.out.println("______________________________________________count =  " + hops);
+						
+						//neighbor.cost  += cost(current , neighbor);
+						System.out.println("________________________________________" + neighbor.cost);
+						
+						exploreW(neighbor, current.getX(), current.getY(), hops , cost);	//EXPLORE THE NODE
+						explored.add(neighbor);	//ADD THE NODE TO THE LIST
+					}
+				}
+			}
+		}
+		return explored;
+	}
+	
+	public void exploreW(Node current, int lastx, int lasty, int hops , double cost) {	//EXPLORE A NODE
+		//System.out.println("_____________explor____________");
+		if(current.getType()!= 's' && current.getType() != 'e') {	//CHECK THAT THE NODE IS NOT THE START OR FINISH
+			current.setChecked();
+			//grid.Grid[current.x][current.y].setChecked();
+			System.out.println("* (" + current.x + " , " + current.y + ")");
+		}
+		//SET IT TO EXPLORED
+		current.setLastNode(lastx, lasty);
+		System.out.println("__________________________________________:::::::::::::" + lastx);
+		//KEEP TRACK OF THE NODE THAT THIS NODE IS EXPLORED FROM
+		current.jumps = hops;	//SET THE HOPS FROM THE START
+		
+		current.cost += cost(grid.Grid[lastx][lasty],current);
+		
+		//current.cost = cost;
+		
+		checks++;
+		if(current.getType() == 'e') {	//IF THE NODE IS THE FINISH THEN BACKTRACK TO GET THE PATH
+			System.out.println("____________________________________________________________+++++" + hops);
+			backtrackW(current.parent_x, current.parent_y, hops);
+		}
+	}
+	
+	
+	public void backtrackW(int lx, int ly, int count) {	//BACKTRACK
+		System.out.println("____________bacTrac_____________");
+		length = count;
+		System.out.println("______________________________________________count =  " + length); 
+		while(count > 1) {	//BACKTRACK FROM THE END OF THE PATH TO THE START
+
+			Node current = grid.Grid[lx][ly];
+			
+			current.setFinalPathA();
+			grid.Grid[current.x][current.y].setFinalPathA();
+			
+			
+			lx = current.parent_x;
+			ly = current.parent_y;
+			System.out.println("_________________________-=====++++" + current.parent_x);
+			
+			count--;
+		}
+		solving = false;
+	}
+	
+	public void USearch() {
+		
+
+		int[] start;
+		int[] end;
+		
+		start = grid.start;
+		end = grid.end;
+		
+		solving = true;
+		
+		ArrayList<Node> priority = new ArrayList<Node>();
+		priority.add(grid.Grid[start[0]][start[1]]);
+		
+		
+		while(solving) {
+			
+			
+			System.out.println("__________while()_______________");
+			
+			
+			if(priority.size() <= 0) {
+				solving = false;
+				break;
+			}
+			
 			
 			int jumps = priority.get(0).jumps+1;
 			
@@ -118,10 +260,8 @@ public class AlternateAlgorithm {
 					//MAKES SURE THE NODE IS NOT OUTSIDE THE GRID
 					Node neighbor = grid.Grid[xbound][ybound];
 					if((neighbor.jumps ==-1 || neighbor.jumps > hops) && neighbor.getType()!= '0') {	//CHECKS IF THE NODE IS NOT A WALL AND THAT IT HAS NOT BEEN EXPLORED
-						System.out.println("__________in if_______________");
-						System.out.println("______________________________________________count =  " + hops);
 						
-						neighbor.cost += cost(neighbor , current);
+						//cost(neighbor , current);
 						
 						explore(neighbor, current.getX(), current.getY(), hops);	//EXPLORE THE NODE
 						explored.add(neighbor);	//ADD THE NODE TO THE LIST
@@ -140,7 +280,9 @@ public class AlternateAlgorithm {
 			System.out.println("* (" + current.x + " , " + current.y + ")");
 		}
 		//SET IT TO EXPLORED
-		current.setLastNode(lastx, lasty);	//KEEP TRACK OF THE NODE THAT THIS NODE IS EXPLORED FROM
+		current.setLastNode(lastx, lasty);
+		System.out.println("__________________________________________:::::::::::::" + lastx);
+		//KEEP TRACK OF THE NODE THAT THIS NODE IS EXPLORED FROM
 		current.jumps = hops;	//SET THE HOPS FROM THE START
 		checks++;
 		if(current.getType() == 'e') {	//IF THE NODE IS THE FINISH THEN BACKTRACK TO GET THE PATH
@@ -160,7 +302,7 @@ public class AlternateAlgorithm {
 			current.setFinalPath();
 			grid.Grid[current.x][current.y].setFinalPath();
 			
-			
+			System.out.println("_________________________-=====++++" + current.parent_x);
 			lx = current.parent_x;
 			ly = current.parent_y;
 			count--;
