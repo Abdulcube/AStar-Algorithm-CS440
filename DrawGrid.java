@@ -130,16 +130,28 @@ public class DrawGrid {
 							break;
 						
 					}
+					
+					//Highlights for grids that were checked
 					if(grid.Grid[x][y].wasChecked) {
 						g.setColor(new Color(255,255,179)); //Light Yellow
 						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 					
+					//Bright pink indicattor over the final path squares
 					if(grid.Grid[x][y].isFinalPath) {
 						 g.setColor(new Color(255,0,128)); //Bright Pink
 						 g.setFont(new Font("Arial",Font.BOLD,8));
 						 //Draw String in JPanel
 						 g.drawString("+",x*CSIZE,y*CSIZE+5);
+						 g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					}
+					
+					if(grid.Grid[x][y].isFinalPathA) {
+						 g.setColor(new Color(255,190,59)); //Orange
+						 g.setFont(new Font("Arial",Font.BOLD,8));
+						 //Draw String in JPanel
+						 g.drawString("+",x*CSIZE,y*CSIZE+5);
+						 g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 				}
 			}
