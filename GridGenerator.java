@@ -274,6 +274,7 @@ class GridGenerator {
 
 // Creates a new file with the first two lines being the start and end points
 // then 160 rows of data;
+
   public void writeToFile(String fileName){
     try {
      File myObj = new File(fileName);
@@ -320,7 +321,13 @@ class GridGenerator {
    return;
   }
 
-
+  public void uncheck() {
+	  for(int x = 0; x < 160; x++) {	//PAINT EACH NODE IN THE GRID
+			for(int y = 0; y < 120; y++) {
+				this.Grid[x][y].reset();
+			}
+	  }
+  }
 
 
 
