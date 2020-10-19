@@ -1,6 +1,8 @@
 class Node{
   double cost = -1;
   boolean wasChecked;
+  boolean wasCheckedA = false;
+  
   boolean isFinalPath;
   boolean isFinalPathA = false;
   char type;
@@ -113,11 +115,22 @@ class Node{
   public void setChecked() {
 	  this.wasChecked = true;
   }
+  public void setCheckedA() {
+	  this.wasCheckedA = true;
+  }
+  public void uncheck() {
+	  this.wasChecked = false;
+  }
   public void setFinalPath() {
 	  this.isFinalPath = true;
   }
   public void setFinalPathA() {
 	  this.isFinalPathA = true;
+  }
+  public void reset() {
+	  this.jumps = -1;
+	  this.cost = -1;
+	 // this.wasChecked = false;
   }
   
 	public double getEuclidDist(int end1 , int end2) {		//CALCULATES THE EUCLIDIAN DISTANCE TO THE FINISH NODE
