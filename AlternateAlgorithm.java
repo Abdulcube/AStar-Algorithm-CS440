@@ -6,7 +6,7 @@ public class AlternateAlgorithm {
 	GridGenerator grid;
 	DrawGrid scene;
 	
-	private boolean solving = false;
+	private boolean pathFound = false;
 	private int length = 0;
 	private int checks = 0;
 	
@@ -25,7 +25,12 @@ public class AlternateAlgorithm {
 		scene = b;
 		
 	}
-	
+public void reset() {
+	this.pathFound = false;
+	this.length = 0;
+	this.checks = 0;
+	this.grid.uncheck();
+}
 public void AStar() {
 		
 
@@ -35,83 +40,99 @@ public void AStar() {
 		start = grid.start;
 		end = grid.end;
 		
-		solving = true;
+		pathFound = true;
 		
-		ArrayList<Node> priority = new ArrayList<Node>();
-		priority.add(grid.Grid[start[0]][start[1]]);
+		ArrayList<Node> fringe = new ArrayList<Node>();
+		fringe.add(grid.Grid[start[0]][start[1]]);
 		
 		
-		while(solving) {
+		while(pathFound) {
 			
-			if(priority.size() <= 0) {
-				solving = false;
+			if(fringe.size() <= 0) {
+				pathFound = false;
 				break;
 			}
 			
-			double cost = priority.get(0).cost+1;
+			//Cost allows the nodes to be compared with the different types and associated math
+			double cost = fringe.get(0).cost+1;
 			
-			int jumps = priority.get(0).jumps+1;
+			//used STRICKTLY backtracking in the AStar algorithm
+			int jumps = fringe.get(0).jumps+1;
 			
+			//List of nodes that have already been checked by the explore()
+			ArrayList<Node> explored = exploreNeighborsW(fringe.get(0),jumps,cost);
 			
-			ArrayList<Node> explored = exploreNeighborsW(priority.get(0),jumps,cost);
-			if(explored.size() > 0) {
+			//Pop() all items from the list and explore() all of their possible paths in order of cost
+			if(explored.size() >  0) { 
 				
-				priority.remove(0);
-				priority.addAll(explored);
 				
-				//LIVE UPDATE
+				fringe.remove(0);
+				fringe.addAll(explored);
+				
+				//LIVE UPDATE FOR MAP
 				scene.updateMap();
 				
 				
 			} else {
-				priority.remove(0);
+				fringe.remove(0);
 			}
-			sortQueW(priority);	//SORT THE PRIORITY QUE
+			sortQueW(fringe); //Sort the list in order by cost
 		}
 	}
 	
-	public ArrayList<Node> sortQueW(ArrayList<Node> sort) {	//SORT PRIORITY QUE
+	//Sort the array list by cost of the nodes
+	public ArrayList<Node> sortQueW(ArrayList<Node> sort) {	
 		
-		//System.out.println("___________sortQ______________");
-		int[] start;
+		//ending nodes of the map
 		int[] end;
 		
-		start = grid.start;
+		//Set the end so to calculate distance
 		end = grid.end;
 		
-		int c = 0;
-		while(c < sort.size()) {
-			int sm = c;
-			for(int i = c+1; i < sort.size(); i++) {
+		int cur = 0;
+		while(cur < sort.size()) {
+			int little = cur;
+			for(int k = cur+1; k < sort.size(); k++) {
 				
-				if(sort.get(i).getEuclidDist(end[0],end[1])+sort.get(i).cost < sort.get(sm).getEuclidDist(end[0],end[1])+sort.get(sm).cost){
-					sm = i;
+				if(sort.get(k).getEuclidDist(end[0],end[1])+sort.get(k).cost < sort.get(little).getEuclidDist(end[0],end[1])+sort.get(little).cost){
+					little = k;
 				}
 			}
-			if(c != sm) {
-				Node temp = sort.get(c);
-				sort.set(c, sort.get(sm));
-				sort.set(sm, temp);
+			if(cur != little) {
+				Node temp = sort.get(cur);
+				sort.set(cur, sort.get(little));
+				sort.set(little, temp);
 			}	
-			c++;
+			cur++;
 		}
 		return sort;
 	}
 	
-	public ArrayList<Node> exploreNeighborsW(Node current, int hops , double cost) {	//EXPLORE NEIGHBORS
-		//System.out.println("____________exploreNei_____________");
-		ArrayList<Node> explored = new ArrayList<Node>();	//LIST OF NODES THAT HAVE BEEN EXPLORED
+	//Explore the 8 surrounding blocks for possible canidates
+	public ArrayList<Node> exploreNeighborsW(Node current, int jumps , double cost) {
+		
+		//list of all explored nighbors
+		ArrayList<Node> explored = new ArrayList<Node>();
+		
 		for(int a = -1; a <= 1; a++) {
+			//row
 			for(int b = -1; b <= 1; b++) {
+				//column
+				
 				int xbound = current.getX()+a;
 				int ybound = current.getY()+b;
 				if((xbound > -1 && xbound < 160) && (ybound > -1 && ybound < 120)) {	
-					//MAKES SURE THE NODE IS NOT OUTSIDE THE GRID
+					//Assures that the node is going to be inside of the Map()
 					Node neighbor = grid.Grid[xbound][ybound];
-					if((neighbor.jumps ==-1 || neighbor.jumps > hops) && neighbor.getType()!= '0') {	//CHECKS IF THE NODE IS NOT A WALL AND THAT IT HAS NOT BEEN EXPLORED
+					
+					//if never been touched or if its number of jumps are more
+					if((neighbor.jumps ==-1 || neighbor.jumps > jumps) && neighbor.getType()!= '0') {
 						
-						exploreW(neighbor, current.getX(), current.getY(), hops , cost);	//EXPLORE THE NODE
-						explored.add(neighbor);	//ADD THE NODE TO THE LIST
+						//Explore the node itself
+						exploreW(neighbor, current.getX(), current.getY(), jumps , cost);
+						
+						//Add node to the explored list
+						explored.add(neighbor);
 					}
 				}
 			}
@@ -119,52 +140,53 @@ public void AStar() {
 		return explored;
 	}
 	
-	public void exploreW(Node current, int lastx, int lasty, int hops , double cost) {	//EXPLORE A NODE
-		//System.out.println("_____________explor____________");
+	public void exploreW(Node current, int lastx, int lasty, int jumps , double cost) {	//EXPLORE A NODE
+		
 		if(current.getType()!= 's' && current.getType() != 'e') {	//CHECK THAT THE NODE IS NOT THE START OR FINISH
-			current.setChecked();
-			//grid.Grid[current.x][current.y].setChecked();
-			//System.out.println("* (" + current.x + " , " + current.y + ")");
+			current.setCheckedA();
 		}
-		//SET IT TO EXPLORED
+		//set the prevous x and y values for traceback purposes for final path
 		current.setLastNode(lastx, lasty);
 		
-		System.out.println("Checked nodes - (" + lastx + "," + lasty + ")");
-
-		//KEEP TRACK OF THE NODE THAT THIS NODE IS EXPLORED FROM
-		current.jumps = hops;	//SET THE HOPS FROM THE START
+		//set jumps its taken scince the begining
+		current.jumps = jumps;
 		
+		//add the cost from the total of the nodes before it as it builds towards the end
 		current.cost += cost(grid.Grid[lastx][lasty],current);
 		
-		//current.cost = cost;
-		
+		//iterator
 		checks++;
-		if(current.getType() == 'e') {	//IF THE NODE IS THE FINISH THEN BACKTRACK TO GET THE PATH
-			backtrackW(current.parent_x, current.parent_y, hops);
+		
+		//If node is the final ending point then backtrace the shortest cost to find the finalPath
+		if(current.getType() == 'e') {	
+			//backtrack so the algortihm can print the path
+			backtrackW(current.parent_x, current.parent_y, jumps);
 		}
 	}
 	
-	public void backtrackW(int lx, int ly, int count) {	//BACKTRACK
-		//System.out.println("____________bacTrac_____________");
+	//Goes backwards through the prevous nodes until the start is found
+	public void backtrackW(int lx, int ly, int count) {
+		
+		//iterator
 		length = count;
-		//System.out.println("______________________________________________count =  " + length); 
-		while(count > 1) {	//BACKTRACK FROM THE END OF THE PATH TO THE START
 
+		//while the number of blocks in the path is not 0 OR the start has been found
+		while(count >= 1) {
+
+			//cur itterator
 			Node current = grid.Grid[lx][ly];
 			
 			current.setFinalPathA();
 			grid.Grid[current.x][current.y].setFinalPathA();
 			
-			//System.out.println("(" + current.x + "," + current.y + ")");
-			
-			
+			//iterate backwards through the node path
 			lx = current.parent_x;
 			ly = current.parent_y;
 			
 			
 			count--;
 		}
-		solving = false;
+		pathFound = false;
 	}
 	
 	public void USearch() {
@@ -176,47 +198,42 @@ public void AStar() {
 		start = grid.start;
 		end = grid.end;
 		
-		solving = true;
+		pathFound = true;
 		
-		ArrayList<Node> priority = new ArrayList<Node>();
-		priority.add(grid.Grid[start[0]][start[1]]);
+		ArrayList<Node> fringe = new ArrayList<Node>();
+		fringe.add(grid.Grid[start[0]][start[1]]);
 		
 		
-		while(solving) {
+		while(pathFound) {
 			
 			
-			//System.out.println("__________while()_______________");
-			
-			
-			if(priority.size() <= 0) {
-				solving = false;
+			if(fringe.size() <= 0) {
+				pathFound = false;
 				break;
 			}
 			
 			
-			int jumps = priority.get(0).jumps+1;
+			int jumps = fringe.get(0).jumps+1;
 			
 			
-			ArrayList<Node> explored = exploreNeighbors(priority.get(0),jumps);
+			ArrayList<Node> explored = exploreNeighbors(fringe.get(0),jumps);
 			if(explored.size() > 0) {
 				
-				priority.remove(0);
-				priority.addAll(explored);
+				fringe.remove(0);
+				fringe.addAll(explored);
 				
-				//LIVE UPDATE
 				scene.updateMap();
 				
 				
 			} else {
-				priority.remove(0);
+				fringe.remove(0);
 			}
-			sortQue(priority);	//SORT THE PRIORITY QUE
+			sortQue(fringe);
 		}
 	}
 	
-	public ArrayList<Node> sortQue(ArrayList<Node> sort) {	//SORT PRIORITY QUE
+	public ArrayList<Node> sortQue(ArrayList<Node> sort) {
 		
-		//System.out.println("___________sortQ______________");
 		int[] start;
 		int[] end;
 		
@@ -242,22 +259,21 @@ public void AStar() {
 		return sort;
 	}
 	
-	public ArrayList<Node> exploreNeighbors(Node current, int hops) {	//EXPLORE NEIGHBORS
-		//System.out.println("____________exploreNei_____________");
-		ArrayList<Node> explored = new ArrayList<Node>();	//LIST OF NODES THAT HAVE BEEN EXPLORED
+	public ArrayList<Node> exploreNeighbors(Node current, int jumps) {	
+		ArrayList<Node> explored = new ArrayList<Node>();
 		for(int a = -1; a <= 1; a++) {
 			for(int b = -1; b <= 1; b++) {
 				int xbound = current.getX()+a;
 				int ybound = current.getY()+b;
 				if((xbound > -1 && xbound < 160) && (ybound > -1 && ybound < 120)) {	
-					//MAKES SURE THE NODE IS NOT OUTSIDE THE GRID
+
 					Node neighbor = grid.Grid[xbound][ybound];
-					if((neighbor.jumps ==-1 || neighbor.jumps > hops) && neighbor.getType()!= '0') {	//CHECKS IF THE NODE IS NOT A WALL AND THAT IT HAS NOT BEEN EXPLORED
+					if((neighbor.jumps ==-1 || neighbor.jumps > jumps) && neighbor.getType()!= '0') {
 						
-						//cost(neighbor , current);
+
 						
-						explore(neighbor, current.getX(), current.getY(), hops);	//EXPLORE THE NODE
-						explored.add(neighbor);	//ADD THE NODE TO THE LIST
+						explore(neighbor, current.getX(), current.getY(), jumps);	
+						explored.add(neighbor);
 					}
 				}
 			}
@@ -265,35 +281,24 @@ public void AStar() {
 		return explored;
 	}
 	
-	public void explore(Node current, int lastx, int lasty, int hops) {	//EXPLORE A NODE
-		//System.out.println("_____________explor____________");
-		if(current.getType()!= 's' && current.getType() != 'e') {	//CHECK THAT THE NODE IS NOT THE START OR FINISH
+	public void explore(Node current, int lastx, int lasty, int jumps) {
+		if(current.getType()!= 's' && current.getType() != 'e') {	
 			current.setChecked();
-			//grid.Grid[current.x][current.y].setChecked();
-			//System.out.println("* (" + current.x + " , " + current.y + ")");
 		}
-		//SET IT TO EXPLORED
 		if(current.x == lastx && current.y == lasty) {} else {
 			current.setLastNode(lastx, lasty);
 		}
-		//System.out.print("Checked nodes - (" + lastx + "," + lasty + ")");
-		//System.out.println(" - Current (" + current.x + "," + current.y + ")" );
-		//System.out.println("__________________________________________:::::::::::::" + lastx);
-		//KEEP TRACK OF THE NODE THAT THIS NODE IS EXPLORED FROM
-		current.jumps = hops;	//SET THE HOPS FROM THE START
+		current.jumps = jumps;
 		checks++;
-		if(current.getType() == 'e') {	//IF THE NODE IS THE FINISH THEN BACKTRACK TO GET THE PATH
-			//System.out.println("____________________________________________________________" + hops);
-			backtrack(current.parent_x, current.parent_y, hops);
+		if(current.getType() == 'e') {
+			backtrack(current.parent_x, current.parent_y, jumps);
 		}
 	}
 	
-	public void backtrack(int lx, int ly, int count) {	//BACKTRACK
-		//System.out.println("____________bacTrac_____________");
+	public void backtrack(int lx, int ly, int count) {	
 		length = count;
-		//System.out.println("______________________________________________count =  " + length); 
-		while(count >= 1) {	//BACKTRACK FROM THE END OF THE PATH TO THE START
-			//System.out.println("_________________________");
+		while(count >= 1) {	
+	
 			Node current = grid.Grid[lx][ly];
 			
 			current.setFinalPath();
@@ -303,7 +308,7 @@ public void AStar() {
 			ly = current.parent_y;
 			count--;
 		}
-		solving = false;
+		pathFound = false;
 	}
 	
 	public double cost(Node parent, Node child) {
@@ -413,19 +418,6 @@ public void AStar() {
 				}
 				return neighbors;
 			}
-////////////////////////////////////////////
-/*
-		while (!fringe.isEmpty()) {
-			Node cur = fringe.remove();
-
-			if (cur.x == test.end[0] && cur.y == test.end[1]) {
-				//Path Found
-			}
-
-
-		}
-	}
-*/
 
 	//FInd shortest path from start to current node
 	public double findG(Node cur, Node start) {
