@@ -68,7 +68,7 @@ public class DrawGrid {
 	public void updateMap() {
 		
 		try {
-			Thread.sleep(5);
+			Thread.sleep(8);
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		}
@@ -133,6 +133,10 @@ public class DrawGrid {
 					//Highlights for grids that were checked
 					if(grid.Grid[x][y].wasChecked) {
 						g.setColor(new Color(255,255,179)); //Light Yellow
+						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					}
+					if(grid.Grid[x][y].wasCheckedA) {
+						g.setColor(new Color(255,179,25)); //Light Yellow
 						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 					
