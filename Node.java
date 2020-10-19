@@ -1,5 +1,5 @@
 class Node{
-  double cost;
+  double cost = -1;
   boolean wasChecked;
   boolean isFinalPath;
   boolean isFinalPathA = false;
