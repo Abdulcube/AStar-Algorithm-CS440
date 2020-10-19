@@ -27,7 +27,7 @@ public class DrawGrid {
 		grid = g;
 	}
 	
-
+	
 	
 	private final int WIDTH = 820;
 	private final int HEIGHT = 640;
@@ -61,8 +61,7 @@ public class DrawGrid {
 		
 		canvas = new Map();
 		canvas.setBounds(10, 10, XSIZE+1, YSIZE+1);
-		
-		
+
 	}
 	
 	//adds delay for live solving and updates the map
@@ -147,7 +146,7 @@ public class DrawGrid {
 					}
 					
 					if(grid.Grid[x][y].isFinalPathA) {
-						 g.setColor(new Color(255,190,59)); //Orange
+						 g.setColor(new Color(153,0,0)); //maroon
 						 g.setFont(new Font("Arial",Font.BOLD,8));
 						 //Draw String in JPanel
 						 g.drawString("+",x*CSIZE,y*CSIZE+5);
