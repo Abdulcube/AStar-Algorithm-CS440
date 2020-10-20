@@ -68,7 +68,7 @@ public class DrawGrid {
 	public void updateMap() {
 		
 		try {
-			Thread.sleep(8);
+			Thread.sleep(15);
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
 		}
@@ -136,7 +136,12 @@ public class DrawGrid {
 						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 					if(grid.Grid[x][y].wasCheckedA) {
-						g.setColor(new Color(255,179,25)); //Light Yellow
+						g.setColor(new Color(255,179,25)); //Light Orange
+						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					}
+					
+					if(grid.Grid[x][y].wasCheckedW) {
+						g.setColor(new Color(100,255,100)); //Light Green
 						g.drawOval(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
 					}
 					
@@ -151,6 +156,14 @@ public class DrawGrid {
 					
 					if(grid.Grid[x][y].isFinalPathA) {
 						 g.setColor(new Color(153,0,0)); //maroon
+						 g.setFont(new Font("Arial",Font.BOLD,8));
+						 //Draw String in JPanel
+						 g.drawString("+",x*CSIZE,y*CSIZE+5);
+						 g.drawRect(x*CSIZE,y*CSIZE,CSIZE,CSIZE);
+					}
+					
+					if(grid.Grid[x][y].isFinalPathW) {
+						 g.setColor(new Color(0,60,0)); //Dark Green
 						 g.setFont(new Font("Arial",Font.BOLD,8));
 						 //Draw String in JPanel
 						 g.drawString("+",x*CSIZE,y*CSIZE+5);
