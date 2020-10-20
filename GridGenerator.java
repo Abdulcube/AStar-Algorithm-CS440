@@ -11,8 +11,10 @@ class GridGenerator {
   int[] end;
   int hardTraverse;
 
-// 5 Kinds of constructors:
-// One Constructor that generates the complete grid with start and end points
+// 3 Kinds of constructors:
+// One Constructor with a null grid, no values for start and end;
+// One Constructor that takes in arrays with a start and end location;
+// One Constructor that takes in a string that is a file name to import the data;
   public GridGenerator(){
     Grid = new Node[160][120];
     start = new int[2];
@@ -25,38 +27,27 @@ class GridGenerator {
     generate();
     stats();
   }
-//the file name is the file to save the grid, rand is to separate the constructor from others
-  public GridGenerator(String fileName, int rand){
+  public GridGenerator(int[] s, int[] e){
+	  
     Grid = new Node[160][120];
-    start = new int[2];
-    end = new int[2];
-    //generate();
+    start = s;
+    end = e;
+    Grid[s[0]][s[1]] = new Node('s' , s[0] , s[1]);
+    Grid[e[0]][e[1]] = new Node('e' , e[0] , e[1]);
+    
     blockedCells();
     hardCells();
     normalCells();
     highways();
-    writeToFile(fileName);
-    //stats();
-  }
-  // One Constructor that takes in arrays with a start and end location;
-  public GridGenerator(int[] start, int[] end){
-    Grid = new Node[160][120];
-    Grid[start[0]][start[1]] = new Node('s' , start[0] , start[1]);
-    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
-    this.start = start;
-    this.end = end;
+    generate();
+    stats();
+	  
+	  
+
+    this.start = s;
+    this.end = e;
     hardTraverse = 0;
   }
-  //Reads in a files grid and creates a new start and stop location
-  public GridGenerator(String fileName, int[] start, int[] end){
-    this(fileName);
-    Grid[start[0]][start[1]] = new Node('s' , start[0] , start[1]);
-    Grid[end[0]][end[1]] = new Node('e' , end[0] , end[1]);
-    this.start = start;
-    this.end = end;
-
-  }
-  // One Constructor that takes in a string that is a file name to import the data;
   public GridGenerator(String fileName){
     Grid = new Node[160][120];
     hardTraverse = 0;
@@ -92,7 +83,6 @@ class GridGenerator {
     }
   }
 
-
 //Print to stream the values within the grid
 // Warning! Huge output for the stream.
   public void traverse(){
@@ -118,7 +108,7 @@ class GridGenerator {
     }
       System.out.println("Number of hardCells = " + hardTraverse);
   }
-//Generates start and stop
+
   public void generate(){
     int x1,x2,y1,y2=0;
     do{
@@ -297,6 +287,7 @@ class GridGenerator {
 
 // Creates a new file with the first two lines being the start and end points
 // then 160 rows of data;
+
   public void writeToFile(String fileName){
     try {
      File myObj = new File(fileName);
@@ -305,9 +296,7 @@ class GridGenerator {
        FileWriter fileWriter = new FileWriter(fileName);
        PrintWriter writing = new PrintWriter(fileWriter);
        writing.printf("Start: %d, %d ", start[0], start[1]);
-       writing.printf("%n");
        writing.printf("End: %d, %d ", end[0], end[1]);
-       writing.printf("%n");
        for(int i = 0; i<Grid.length; i++){
          for(int k =0; k<Grid[i].length; k++){
            if(Grid[i][k] == null){
