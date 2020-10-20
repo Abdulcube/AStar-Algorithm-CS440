@@ -30,6 +30,13 @@ public void reset() {
 	this.length = 0;
 	this.checks = 0;
 	this.grid.uncheck();
+	
+	for(int x = 0; x < 160; x++) {	//PAINT EACH NODE IN THE GRID
+		for(int y = 0; y < 120; y++) {
+			grid.Grid[x][y].cost = -1;
+			grid.Grid[x][y].jumps = -1;
+		}
+	}
 }
 public void AStar() {
 		
@@ -119,11 +126,11 @@ public void AStar() {
 			for(int b = -1; b <= 1; b++) {
 				//column
 				
-				int xbound = current.getX()+a;
-				int ybound = current.getY()+b;
-				if((xbound > -1 && xbound < 160) && (ybound > -1 && ybound < 120)) {	
+				int x = current.getX()+a;
+				int y = current.getY()+b;
+				if((x > -1 && x < 160) && (y > -1 && y < 120)) {	
 					//Assures that the node is going to be inside of the Map()
-					Node neighbor = grid.Grid[xbound][ybound];
+					Node neighbor = grid.Grid[x][y];
 					
 					//if never been touched or if its number of jumps are more
 					if((neighbor.jumps ==-1 || neighbor.jumps > jumps) && neighbor.getType()!= '0') {
@@ -160,6 +167,8 @@ public void AStar() {
 		//If node is the final ending point then backtrace the shortest cost to find the finalPath
 		if(current.getType() == 'e') {	
 			//backtrack so the algortihm can print the path
+			
+			
 			backtrackW(current.parent_x, current.parent_y, jumps);
 		}
 	}
@@ -169,12 +178,15 @@ public void AStar() {
 		
 		//iterator
 		length = count;
+		double cprint = 0;
 
 		//while the number of blocks in the path is not 0 OR the start has been found
 		while(count >= 1) {
 
 			//cur itterator
 			Node current = grid.Grid[lx][ly];
+			
+			cprint += current.cost;
 			
 			current.setFinalPathA();
 			grid.Grid[current.x][current.y].setFinalPathA();
@@ -187,6 +199,170 @@ public void AStar() {
 			count--;
 		}
 		pathFound = false;
+		
+		System.out.println("A* jumps: " + length + "  A* cost: " + cprint);
+	}
+	
+public void WAStar(double w) {
+		
+	
+		int[] start;
+		int[] end;
+		
+		start = grid.start;
+		end = grid.end;
+		
+		pathFound = true;
+		
+		ArrayList<Node> fringe = new ArrayList<Node>();
+		fringe.add(grid.Grid[start[0]][start[1]]);
+		
+		
+		while(pathFound) {
+			
+			if(fringe.size() <= 0) {
+				pathFound = false;
+				break;
+			}
+			
+			//Cost allows the nodes to be compared with the different types and associated math
+			double cost = fringe.get(0).cost+1;
+			
+			//used STRICKTLY backtracking in the AStar algorithm
+			int jumps = fringe.get(0).jumps+1;
+			
+			//List of nodes that have already been checked by the explore()
+			ArrayList<Node> explored = exploreNeighborsWW(fringe.get(0),jumps,cost , w);
+			
+			//Pop() all items from the list and explore() all of their possible paths in order of cost
+			if(explored.size() >  0) { 
+				
+				
+				fringe.remove(0);
+				fringe.addAll(explored);
+				
+				//LIVE UPDATE FOR MAP
+				scene.updateMap();
+				
+				
+			} else {
+				fringe.remove(0);
+			}
+			sortQueWW(fringe , w); //Sort the list in order by cost
+		}
+	}
+	
+	//Sort the array list by cost of the nodes
+	public ArrayList<Node> sortQueWW(ArrayList<Node> sort , double w) {	
+		
+		//ending nodes of the map
+		int[] end;
+		
+		//Set the end so to calculate distance
+		end = grid.end;
+		
+		int cur = 0;
+		while(cur < sort.size()) {
+			int little = cur;
+			for(int k = cur+1; k < sort.size(); k++) {
+				
+				if((sort.get(k).getEuclidDist(end[0],end[1]) )+ (sort.get(k).cost * 1/w ) < (sort.get(little).getEuclidDist(end[0],end[1])  )+(sort.get(little).cost * 1/w )){
+					little = k;
+				}
+			}
+			if(cur != little) {
+				Node temp = sort.get(cur);
+				sort.set(cur, sort.get(little));
+				sort.set(little, temp);
+			}	
+			cur++;
+		}
+		return sort;
+	}
+public ArrayList<Node> exploreNeighborsWW(Node current, int jumps , double cost , double w) {
+		
+		//list of all explored nighbors
+		ArrayList<Node> explored = new ArrayList<Node>();
+		
+		for(int a = -1; a <= 1; a++) {
+			//row
+			for(int b = -1; b <= 1; b++) {
+				//column
+				
+				int x = current.getX()+a;
+				int y = current.getY()+b;
+				if((x > -1 && x < 160) && (y > -1 && y < 120)) {	
+					//Assures that the node is going to be inside of the Map()
+					Node neighbor = grid.Grid[x][y];
+					
+					//if never been touched or if its number of jumps are more
+					if((neighbor.jumps ==-1 || neighbor.jumps > jumps) && neighbor.getType()!= '0') {
+						
+						//Explore the node itself
+						exploreWW(neighbor, current.getX(), current.getY(), jumps , cost , w);
+						
+						//Add node to the explored list
+						explored.add(neighbor);
+					}
+				}
+			}
+		}
+		return explored;
+	}
+	
+	public void exploreWW(Node current, int lastx, int lasty, int jumps , double cost , double w) {	//EXPLORE A NODE
+		
+		if(current.getType()!= 's' && current.getType() != 'e') {	//CHECK THAT THE NODE IS NOT THE START OR FINISH
+			current.setCheckedW();
+		}
+		//set the prevous x and y values for traceback purposes for final path
+		current.setLastNode(lastx, lasty);
+		
+		//set jumps its taken scince the begining
+		current.jumps = jumps;
+		
+		//add the cost from the total of the nodes before it as it builds towards the end
+		current.cost += cost(grid.Grid[lastx][lasty],current);
+		
+		//iterator
+		checks++;
+		
+		//If node is the final ending point then backtrace the shortest cost to find the finalPath
+		if(current.getType() == 'e') {	
+			
+			
+			//backtrack so the algortihm can print the path
+			backtrackWW(current.parent_x, current.parent_y, jumps);
+		}
+	}
+	public void backtrackWW(int lx, int ly, int count) {
+		
+		//iterator
+		length = count;
+		double cprint = 0;
+		//System.out.println("Weighted A* length" + grid.Grid[lx][ly].cost);
+		
+		//while the number of blocks in the path is not 0 OR the start has been found
+		while(count >= 1) {
+
+			//cur itterator
+			Node current = grid.Grid[lx][ly];
+			
+			cprint += current.cost;
+			
+			current.setFinalPathA();
+			grid.Grid[current.x][current.y].setFinalPathW();
+			
+			//iterate backwards through the node path
+			lx = current.parent_x;
+			ly = current.parent_y;
+			
+			
+			count--;
+		}
+		pathFound = false;
+		
+		System.out.println("Weighted A* jumps: " + length + "  Weighted A* cost: " + cprint);
 	}
 	
 	public void USearch() {
@@ -245,7 +421,7 @@ public void AStar() {
 			int sm = c;
 			for(int i = c+1; i < sort.size(); i++) {
 				
-				if(sort.get(i).getEuclidDist(end[0],end[1])+sort.get(i).jumps < sort.get(sm).getEuclidDist(end[0],end[1])+sort.get(sm).jumps){
+				if(sort.get(i).getEuclidDist(end[0],end[1])/*+sort.get(i).jumps */ < sort.get(sm).getEuclidDist(end[0],end[1])/*+sort.get(sm).jumps */){
 					sm = i;
 				}
 			}
