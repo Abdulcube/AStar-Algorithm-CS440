@@ -2,9 +2,11 @@ class Node{
   double cost = -1;
   boolean wasChecked;
   boolean wasCheckedA = false;
+  boolean wasCheckedW = false;
   
   boolean isFinalPath;
   boolean isFinalPathA = false;
+  boolean isFinalPathW = false;
   char type;
   int x;
   int y;
@@ -118,6 +120,9 @@ class Node{
   public void setCheckedA() {
 	  this.wasCheckedA = true;
   }
+  public void setCheckedW() {
+	  this.wasCheckedW = true;
+  }
   public void uncheck() {
 	  this.wasChecked = false;
   }
@@ -126,6 +131,9 @@ class Node{
   }
   public void setFinalPathA() {
 	  this.isFinalPathA = true;
+  }
+  public void setFinalPathW() {
+	  this.isFinalPathW = true;
   }
   public void reset() {
 	  this.jumps = -1;
