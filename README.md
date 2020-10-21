@@ -3,8 +3,12 @@
 Abdulrahman Abdulrahman, Brian Moran, Fares Easa, Khalid Masuod
 CS440
 10/20/20
+
 Assignment 1: Heuristic Search
+
 Objective: For this project we were tasked with creating a 2D discretized terrain grid that will support an A* path finding Algorithm. The A* algorithm will be run with three different heuristics in mind: uniform cost search, normal A* search algorithm, and weighted A* search.
+
+
 Submission:
 	Assign1.zip containing:
 -	Algorithm.java
@@ -51,6 +55,8 @@ o	Generates 4 highways within the map
 	highways()
 o	Creates a new file with the first two lines being the start and end points and then 160 rows of data;
 	writeToFile()
+
+
 Deliverables:
 •	Due to time constraints, we did not create a gui of any kind to visualize different maps of varying start and ends as well as different obstacles. However, we have all of the components required to do so. The grid can be generated from a file, as well as saved to a file, the start and end points can be chosen or randomized.
 
