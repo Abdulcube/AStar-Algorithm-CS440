@@ -224,10 +224,13 @@ public class Algorithm {
 			return Math.sqrt(8)/ 4;
 		}
 		//moving between two hard cells diagonally
-		else {
+		else if ((cellPos(parent, child).equals("br") || cellPos(parent, child).equals("tr") || cellPos(parent, child).equals("bl") || cellPos(parent, child).equals("tl")) && parent.getType() == '2' && child.getType() == '2') {
 			return (Math.sqrt(8));
 		}
-
+		//Moving in and out of a highway
+		else{
+			return 1.0;
+		}
 
 	}
 }
